@@ -1,0 +1,6 @@
+username
+flag_all
+lasttime_all
+mDataList
+
+06-24 16:12:37.232: I/System.out(24886): {content=内容: 好惨3, mealPrice=饭菜价格:8, time=结束时间: 2015-06-23T15:46:59Z, price=悬赏是: 5, acceptBy=null, diningRoomName=食堂是:first, postUserName=发布者是:a, pk={pkid=36}}

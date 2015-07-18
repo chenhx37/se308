@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+
+{% block title %}index page{% endblock %}
+{% block extendCSS %}
+<style type="text/css">
+table {
+	border: 1px solid black;
+}
+table td {
+	border: 1px solid black;
+}
+</style>
+{% endblock %}
+{% block content %}
+{{username}} have log in
+<!-- 
+    users = User.objects.all()
+    dinings = DiningRoom.objects.all()
+    meals = Meal.objects.all()
+    windows = Window.objects.all()
+    orders = Order.objects.all()
+ -->
+<br>
+<a href="http://127.0.0.1:8000/ddmeal/logout/">退出</a>
+<div>
+	<h2>Users List</h2>
+	<table>
+		<thead>
+			<tr>
+				<td>Name</td>
+				<td>Password</td>
+			</tr>
+		</thead>	
+		<tbody>
+			{% for user in users %}
+			<tr>
+				<td>{{user.realName}}</td>
+				<td>{{user.password}}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<h2>DiningRoom List</h2>
+	<table>
+		<thead>
+			<tr>
+				<td>Name</td>
+			</tr>
+		</thead>	
+		<tbody>
+			{% for dn in dinings %}
+			<tr>
+				<td>{{dn.name}}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<h2>window List</h2>
+	<table>
+		<thead>
+			<tr>
+				<td>Name</td>
+				<td>in canteen</td>
+			</tr>
+		</thead>	
+		<tbody>
+			{% for wi in windows %}
+			<tr>
+				<td>{{wi.name}}</td>
+				<td>{{wi.diningRoom.name}}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<h2>meal List</h2>
+	<table>
+		<thead>
+			<tr>
+				<td>Name</td>
+				<td>price</td>
+				<td>in diningRoom</td>
+			</tr>
+		</thead>	
+		<tbody>
+			{% for meal in meals %}
+			<tr>
+				<td>{{meal.name}}</td>
+				<td>{{meal.price}}</td>
+				<td>{{meal.diningRoom.name}}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<h2>order List</h2>
+	<table>
+		<thead>
+			<tr>
+				<td>postBy</td>
+				<td>price</td>
+				<td>meal</td>
+				<td>time</td>
+				<td>description</td>
+				<td>accept</td>
+			</tr>
+		</thead>	
+		<tbody>
+			{% for order in orders %}
+			<tr>
+				<td>{{order.postBy.realName}}</td>
+				<td>{{order.price}}</td>
+				<td>{{order.meal.name}}</td>
+				<td>{{order.postTime}}</td>
+				<td>{{order.description}}</td>
+				<td>
+					{% ifequal order.postBy.realName username %}
+					{% else %}
+					    <form action="accept/" method="post">
+		                    {% csrf_token %}
+                            <input type='text' name='id' value='{{order.id}}'>
+                            <input type='submit' value='accept'>
+					    </form>
+					{% endifequal %}
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+<br>
+<div>
+	<form action="release/" method="post">
+		{% csrf_token %}
+		<h3>发布任务：</h3>
+		任务内容：
+		{{ rf.description }}
+		任务价格：
+		{{ rf.price }}
+<!-- 		<label>内容</label>
+		<input name="description" type="text">
+		<label>时间</label>
+		<input name="price" type="text">
+		<label>悬赏</label>
+		<input name="time" type="text"> -->
+		<input type="submit" value="发布">
+	</form>
+</div>
+<br>
+<div>
+	<h3>My orders</h3>
+	{% for my in myOrders %}
+		<form action="delete/" method="post">
+		    {% csrf_token %}
+		    <input type="text" name="id" value='{{my.id}}'> 
+		    <input type="text" name="description" value='{{my.description}}' placeholder='{{my.description}}'>
+		    <input type="text" name="price" value='{{my.price}}' placeholder='{{my.price}}'>
+		    <input type="text" name="status" value='{{my.status}}' placeholder='{{my.status}}'>
+		    <input type="submit" value="删除"> 
+		</form>
+		<form action="finish/" method="post">
+		    {% csrf_token %}
+		    <input type="text" name="id" value='{{my.id}}'>
+		    <input type="submit" value="完成"> 
+		</form>
+	{% endfor %}
+</div>
+<br>
+<div>
+	<h3>My accept Orders</h3>
+	{% for accept in myAcceptOrders %}
+		发布人员：
+		{{accept.postBy.realName}}<br>
+		悬赏：
+		{{accept.price}}<br>
+		时间：
+		{{accept.postTime}}<br>
+		内容：
+		{{accept.description}}<br>
+		状态：
+		{{accept.status}}<br>
+	{% endfor %}
+</div>
+
+<div>
+	<p>not ok：fileupload
+	<a href="http://127.0.0.1:8000/ddmeal/fileUpload">file upload</a></p>
+</div>
+<div>
+	<a href="http://127.0.0.1:8000/ddmeal/createOrder"></a>
+</div>
+
+<div>
+	<h3>my message</h3>
+	user.realName:
+	{{myself.realName}}<br>
+	myself.password
+	{{myself.password}}<br>
+	myself.nickName
+	{{myself.nickName}}<br>
+	myself.phone
+	{{myself.phone}}<br>
+	myself.address
+	{{myself.address}}<br>
+	myself.netID
+	{{myself.netID}}<br>
+
+	<form action="personMs/" method="post">
+	    {% csrf_token %}
+	    <label>nickName</label>
+	    <input type="text" name="nickName" value='{{myself.nickName}}' placeholder='{{my.price}}'>
+	    <label>phone</label>
+	    <input type="text" name="phone" value='{{myself.phone}}' placeholder='{{myself.phone}}'>
+	    <label>address</label>
+	    <input type="text" name = "address" value="{{myself.address}}" placeholder='{{myself.address}}'> 
+	    <label>netID</label>
+	    <input type="text" name="netID" value='{{myself.netID}}' placeholder='{{myself.netID}}'>
+	    <input type="submit"> 
+	</form>
+</div>
+{% endblock %}

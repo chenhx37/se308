@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}index page{% endblock %}
+
+{% block content %}
+{% if current_date %}
+	<h1>Current Time is :{{current_date}}</h1>
+{% endif %}
+<form method='post' enctype="multipart/form-data">
+	{% csrf_token %}
+	<div>
+	{{form.title}}
+	</div>
+	<div>
+	{{form.files}}
+	</div>
+	<!-- input以p段落的形式显示，还有as_ul的形式
+	     {{uf.as_p}} 
+	-->
+    <!-- 	<label>用户名：</label>
+	<input name='username' type='text'>
+	<input name='password' type='password'> -->
+	<input type='submit' value="ok">
+</form>
+<br>
+<a href="http://127.0.0.1:8000/ddmeal/regist/">regist</a>
+{% endblock %}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
+	<classpathentry kind="lib" path="libs/arm64-v8a"/>
+	<classpathentry kind="lib" path="libs/armeabi"/>
+	<classpathentry kind="lib" path="libs/armeabi-v7a"/>
+	<classpathentry kind="lib" path="libs/mips"/>
+	<classpathentry kind="lib" path="libs/mips64"/>
+	<classpathentry kind="lib" path="libs/x86"/>
+	<classpathentry kind="lib" path="libs/x86_64"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="output" path="bin/classes"/>
+</classpath>
