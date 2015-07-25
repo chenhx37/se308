@@ -62,17 +62,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="12dp"
-            android:text="密码  "
+            android:text="密码 "
             android:textSize="30sp" />
 
         <EditText
             android:id="@+id/passwordConfirm"
             android:layout_width="186dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.20"
-            android:paddingLeft="30dp"
+            android:layout_weight="0.02"
+            android:ems="10"
             android:hint="输入密码"
+            android:inputType="textPassword"
+            android:paddingLeft="30dp"
             android:textSize="30sp" />
+
     </LinearLayout>
 
 </RelativeLayout>

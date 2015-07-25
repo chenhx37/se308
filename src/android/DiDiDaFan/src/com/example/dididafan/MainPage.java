@@ -147,10 +147,12 @@ public class MainPage extends Activity {
 		//merge the data in tmpDataList into mDataList
 		public void mergeDataList(){
 			mDataList.clear();
+			
 			try {
 				DB snappydb = DBFactory.open(getApplicationContext());
 				//ArrayList<Map<String,Object>> alDataList = (ArrayList<Map<String,Object>>)snappydb.getObject("mDataList",ArrayList.class);
 				if(!snappydb.exists("mDataList")){
+					System.out.println("2015 not exist");
 					for(Iterator i = tmpDataList.iterator();i.hasNext();){
 						mDataList.add((Map<String,Object>)i.next());
 					}
@@ -159,11 +161,13 @@ public class MainPage extends Activity {
 					snappydb.put("mDataList",mDataList);
 				}
 				else{
+					System.out.println("2015 exist");
 					mDataList = (ArrayList<Map<String,Object>>)snappydb.getObject("mDataList",ArrayList.class);
-					
+					System.out.println("2015 size:"+tmpDataList.size());
 					int f = 0;
 					//deal with insertions and changes
 					for(int t = 0;t < tmpDataList.size();t ++){
+						System.out.println("2015 for "+t);
 						Map<String,Object> tmpMap = tmpDataList.get(t);
 						for(int i = 0;i < mDataList.size();i ++){
 							Map<String,Object> tmpMap1 = mDataList.get(i); 
@@ -181,6 +185,22 @@ public class MainPage extends Activity {
 							System.out.println("add to front");
 						}
 					}
+					
+					System.out.println("2015 p1");
+					List<Map<String,Object>> tmplist = new ArrayList<Map<String,Object>>();
+					for(int i = 0;i < mDataList.size();i++){
+						Map<String,Object> tmpMap1 = mDataList.get(i); 
+						System.out.println("2015 tmpMap1:"+tmpMap1);
+						if(tmpMap1.get("status") == "1"){
+							tmplist.add(tmpMap1);
+						}						
+					}
+					System.out.println("2015 tmplist:"+tmplist);
+					System.out.println("2015 p2");
+					for(int i = 0;i < tmplist.size();i ++){
+						mDataList.remove(tmplist.get(i));
+					}
+					
 					
 					snappydb.put("mDataList", mDataList);
 					
@@ -290,7 +310,7 @@ public class MainPage extends Activity {
             	        			JSONObject smalltemp;       			
             	        			try {
             							smalltemp = new JSONObject(result);
-            							//System.out.println(smalltemp);
+            							System.out.println("2015 smalltemp:"+smalltemp);
             							Map<String,Object> mMap = new HashMap<String,Object>();
             		        			mMap.put("content", "内容: "+smalltemp.getString("description"));
             		        			mMap.put("time", "结束时间: "+smalltemp.getString("endTime"));
@@ -300,11 +320,12 @@ public class MainPage extends Activity {
             		        			mMap.put("postUserName", "发布者是:"+smalltemp.getString("postUserName"));
             		        			mMap.put("diningRoomName", "食堂是:"+smalltemp.getString("diningRoomName"));
             		        			mMap.put("pk",pkstr.get("pkid"));
-            		        			
+            		        			mMap.put("status",smalltemp.getString("status"));
+            		        			System.out.println("2015 status:"+smalltemp.getString("status"));
             		        			
             		        			//mDataList.add(mMap);
             		        			tmpDataList.add(mMap);
-            		        			
+            		        			//
             		        			showList.add(mMap);
             		        			
             		        			
@@ -322,7 +343,7 @@ public class MainPage extends Activity {
             	        		
             	        		//handler.obtainMessage(5).sendToTarget();
             	        		handler.obtainMessage(5, lt).sendToTarget();
-    		        			handler.obtainMessage(6).sendToTarget();
+            	        		handler.obtainMessage(6).sendToTarget();
             	        		
             	        	} catch (JSONException e1) {
             	        		// TODO Auto-generated catch block
@@ -417,7 +438,9 @@ public class MainPage extends Activity {
 	            			String url = baseurl + "ddmeal/index/accept/";	
 	            			List <NameValuePair> params = new ArrayList <NameValuePair>();   //Post运作传送变量必须用NameValuePair[]数组储存 
 	            			int idnow = itemid;
-	            			String orderid = pklist.get(idnow).get("pkid").toString();
+	            			System.out.println("idnow:"+idnow);
+	            			System.out.println("mDataList:"+mDataList);
+	            			String orderid = mDataList.get(idnow).get("pk").toString();
 	            			params.add(new BasicNameValuePair("id",orderid));
 	            			//System.out.println("orderid:"+orderid);
 	            			HttpEntity requestHttpEntity = new UrlEncodedFormEntity(params);
@@ -451,15 +474,16 @@ public class MainPage extends Activity {
 	            	        			//接受订单
 	            	        			hereList = mDataList.get(itemid);
 	            	        			//System.out.println("已接受订单");
-	            	        			mDataList.remove(itemid);
-	            	        			pklist.remove(itemid);
 	            	        			
-	            	        			ep.setAdapter(adapter);
-	            	        			adapter.notifyDataSetChanged();
+	            	        			//pklist.remove(itemid);
 	            	        			
+	            	        			//
+	            	        			//handler.obtainMessage(12).sendToTarget();
+	            	        			handler.obtainMessage(11).sendToTarget();
 	            	        			
 	            	        			temp_id = itemid;
-	            	        			handler.obtainMessage(1,temp_id).sendToTarget();
+	            	        			//handler.obtainMessage(1,temp_id).sendToTarget();
+	            	        			handler.obtainMessage(100).sendToTarget();
 	            	        			System.out.println("跳转成功了?");
 	            	        			//修改适配器	            	        				            	        			
 	            	        		}
@@ -483,6 +507,9 @@ public class MainPage extends Activity {
 		//可以不用handler
 		Handler handler = new Handler(){
 				public void handleMessage(android.os.Message msg){
+						if(msg.what==100){
+							Toast.makeText(getApplicationContext(), "接单成功",Toast.LENGTH_SHORT).show();
+						}		
 						if(msg.what==1){
 							LookDetailAndroid(temp_id);
 						}
@@ -529,7 +556,14 @@ public class MainPage extends Activity {
 							Toast.makeText(getApplicationContext(), "请退出后重新登录",Toast.LENGTH_SHORT).show();
 						}
 						
-						
+						if(msg.what==11){
+							ep.setAdapter(adapter);//////////////////////////////////////////////////////////////////////////////today
+    	        			adapter.notifyDataSetChanged();
+						}
+						if(msg.what==12){
+							getOrdernow();
+							mergeDataList();
+						}
 					};
 				};
 		//查看订单详情

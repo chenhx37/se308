@@ -296,12 +296,12 @@ public class NewsActivity extends Activity {
             		        			mMap.put("diningRoomName", "食堂是:"+smalltemp.getString("diningRoomName"));
             		        			mMap.put("showitem",smalltemp.getString("acceptBy")+"接了"+"你"+"的单");
             		        			mDataList.add(mMap);           		        			           		        				            		        				            		    				
-            		    				System.out.println("正常"+mDataList.get(i).get("content").toString());
+            		    				//System.out.println("正常"+mDataList.get(i).get("content").toString());
             						} catch (JSONException e) {
             							// TODO Auto-generated catch block
             							e.printStackTrace();
             						}
-            	        			System.out.println("item对么"+mDataList.get(i).get("content").toString());
+            	        			//System.out.println("item对么"+mDataList.get(i).get("content").toString());
             	        		}
             	        		
             	        		/*

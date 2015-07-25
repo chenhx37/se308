@@ -28,7 +28,8 @@
             android:layout_weight="0.45"
             android:hint="输入密码"
             android:paddingLeft="30dp"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            android:inputType="textPassword" />
 
     </LinearLayout>
 
